@@ -9,9 +9,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "src/**/*.luau"
-      - "selene.toml"
 
 jobs:
   lint:
