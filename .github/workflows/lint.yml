@@ -1,7 +1,14 @@
+
 name: Lint Lua code with Selene
 
 on:
   pull_request:
+    paths:
+      - "src/**/*.luau"
+      - "selene.toml"
+  push:
+    branches:
+      - main
     paths:
       - "src/**/*.luau"
       - "selene.toml"
