@@ -1,5 +1,2 @@
-[files]
-include = ["src/**/*.luau"]
-
 [selene]
 std = "roblox"
