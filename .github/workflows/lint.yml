@@ -1,0 +1,23 @@
+name: Lint Lua code with Selene
+
+on:
+  pull_request:
+    paths:
+      - "src/**/*.luau"
+      - "selene.toml"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Rust (for Selene)
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+      - name: Install Selene
+        run: cargo install selene
+      - name: Run Selene
+        run: selene src
