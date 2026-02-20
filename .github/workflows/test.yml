@@ -18,6 +18,8 @@ jobs:
         uses: leafo/gh-actions-lua@v10
         with:
           luaVersion: '5.1'
+      - name: Install Luarocks
+        run: sudo apt-get update && sudo apt-get install -y luarocks
       - name: Install TestEZ
         run: luarocks install testez
       - name: Run TestEZ
