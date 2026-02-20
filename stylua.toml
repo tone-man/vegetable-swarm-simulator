@@ -1,0 +1,6 @@
+column_width = 120
+quote_style = "Auto"
+indent_type = "Spaces"
+indent_width = 4
+
+# Add more StyLua options as needed
