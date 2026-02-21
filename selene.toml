@@ -1,6 +1,4 @@
 std = "roblox"
 
-[globals]
-describe = true
-it = true
-expect = true
+[config]
+global_ignores = ["describe", "it", "expect"]
