@@ -45,11 +45,6 @@ jobs:
         with:
           name: test-log
           path: test.log
-      - name: Upload Roblox place artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vegetable-swarm-simulator
-          path: build/output.rbxl
       - name: Upload Roblox place artifact with SHA
         uses: actions/upload-artifact@v4
         with:
