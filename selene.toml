@@ -1,1 +1,6 @@
 std = "roblox"
+
+[globals]
+describe = true
+it = true
+expect = true
