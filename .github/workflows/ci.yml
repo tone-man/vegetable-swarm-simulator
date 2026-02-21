@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - "src/**/*.luau"
+      - "selene.toml"
+      - "stylua.toml"
+      - ".github/workflows/test.yml"
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+      - name: Cache cargo build
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-bin-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-bin-
+      - name: Download Selene binary
+        run: |
+          wget https://github.com/Kampfkarren/selene/releases/latest/download/selene-x86_64-unknown-linux-gnu.tar.gz -O selene.tar.gz
+          tar -xzf selene.tar.gz
+          chmod +x selene
+      - name: Run Selene lint
+        run: ./selene src || { echo "Selene lint failed"; exit 1; }
+      - name: Download StyLua binary
+        run: |
+          wget https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-x86_64-unknown-linux-gnu.tar.gz -O stylua.tar.gz
+          tar -xzf stylua.tar.gz
+          chmod +x stylua
+      - name: Run StyLua formatting
+        run: ./stylua src || { echo "StyLua formatting failed"; exit 1; }
+      - name: Set up Roblox CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          wget https://github.com/Roblox/rojo/releases/latest/download/rojo.zip -O rojo.zip
+          unzip rojo.zip -d rojo
+          wget https://github.com/Roblox/rbx-cli/releases/latest/download/rbx-cli.zip -O rbx-cli.zip
+          unzip rbx-cli.zip -d rbx-cli
+      - name: Run headless tests
+        run: ./rbx-cli/rbx-cli test --project default.project.json --headless | tee test.log
+      - name: Upload test log artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-log
+          path: test.log
+      - name: Upload Roblox place artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vegetable-swarm-simulator
+          path: build/output.rbxl
+      - name: Upload Roblox place artifact with SHA
+        uses: actions/upload-artifact@v3
+        with:
+          name: vegetable-swarm-simulator-${{ github.sha }}
+          path: build/output.rbxl
