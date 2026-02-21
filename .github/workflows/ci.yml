@@ -15,16 +15,16 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Cache cargo registry
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-registry-
       - name: Cache cargo build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/bin
           key: ${{ runner.os }}-cargo-bin-${{ hashFiles('**/Cargo.lock') }}
@@ -55,17 +55,17 @@ jobs:
       - name: Run headless tests
         run: ./rbx-cli/rbx-cli test --project default.project.json --headless | tee test.log
       - name: Upload test log artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-log
           path: test.log
       - name: Upload Roblox place artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: vegetable-swarm-simulator
           path: build/output.rbxl
       - name: Upload Roblox place artifact with SHA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: vegetable-swarm-simulator-${{ github.sha }}
           path: build/output.rbxl
